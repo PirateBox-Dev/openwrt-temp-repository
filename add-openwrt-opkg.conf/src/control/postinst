@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# . /etc/openwrt_release
+# echo "src/gz piratebox http://stable.openwrt.piratebox.de/$DISTRIB_TARGET/packages" >> /etc/opkg.conf
+
+ echo "src/gz piratebox http://stable.openwrt.piratebox.de/all/packages" >> $IPKG_INSTROOT/etc/opkg.conf

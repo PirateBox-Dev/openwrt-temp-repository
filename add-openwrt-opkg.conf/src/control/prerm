@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ sed 's|src/gz piratebox|#src/gz piratebox|'  -i /etc/opkg.conf
