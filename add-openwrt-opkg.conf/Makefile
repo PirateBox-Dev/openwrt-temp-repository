@@ -1,5 +1,5 @@
 NAME = pbxopkg
-VERSION = 0.0.4
+VERSION = 0.0.5
 
 ARCH = all
 IPK = $(NAME)_$(VERSION)_$(ARCH).ipk
@@ -20,7 +20,8 @@ WRT_DESCRIPTION = Adds PirateBox OpenWRT Package-Tree to opkg.conf
 $(IPKDIR)/control.tar.gz: $(IPKDIR)/control
 	tar czf $@ -C $(IPKDIR)/control .
 
-control: $(IPKDIR)/control.tar.gz  $(IPKDIR)/control/control
+$(IPKDIR)/control:  $(IPKDIR)/control/control
+	mkdir -p $(IPKDIR)/control
 	
 $(IPKDIR)/control/control:
 	echo "Package: "$(NAME)   >   $@
@@ -38,13 +39,14 @@ $(IPKDIR)/control/control:
 #	echo "Installed-Size: "  `du -cb $(IPKDIR)/data | tail -n 1 | awk -F \b '{print $1}'` >> $@
 	echo "Description: "$(WRT_DESCRIPTION) >> $@
 
+$(IPKDIR)/data:
+	mkdir -p  $(IPKDIR)/data
+
 $(IPKDIR)/data.tar.gz: $(IPKDIR)/data
 	tar czf $@ -C $(IPKDIR)/data .
 
-data: $(IPKDIR)/data.tar.gz 
-
-$(IPK): $(IPKDIR)/control/control $(IPKDIR)/control.tar.gz $(IPKDIR)/data.tar.gz $(IPKDIR)/control $(IPKDIR)/data 
-	tar czf $@ -C $(IPKDIR) control.tar.gz data.tar.gz debian-binary
+$(IPK): $(IPKDIR)/control/control $(IPKDIR)/control.tar.gz $(IPKDIR)/data.tar.gz $(IPKDIR)/control 
+	tar czf $@ -C $(IPKDIR) ./control.tar.gz ./data.tar.gz debian-binary
 
 all: $(IPK) 
 
